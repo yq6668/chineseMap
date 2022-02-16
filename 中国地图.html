@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="./js/echarts.js"></script>
+    <script type="text/javascript" src="./chinamap/中国.js"></script>
+    <title>Document</title>
+    <style>
+        #map {
+            width: 1000px;
+            height: 600px;
+            margin: auto;
+            color: rgb(67, 155, 125);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>中国地图</h1>
+    <div id="map"></div>
+</body>
+<script>
+    var map = document.getElementById('map');
+    var myChart = echarts.init(map);
+    myChart.showLoading();
+    echarts.registerMap('china', china);
+    myChart.hideLoading();
+    const option = {
+        geo: [{
+            // 地理坐标系组件
+            map: "china",
+            roam: true, // 可以缩放和平移
+            aspectScale: 0.8, // 比例
+            layoutCenter: ['30%', '30%'], // position位置
+            label: {
+                // 图形上的文本标签
+                normal: {
+                    show: true,
+                    textStyle: {
+                        color: "rgba(0, 0, 0, 0.9)",
+                        fontSize: '8'
+                    }
+                },
+                emphasis: { // 高亮时样式
+                    color: "#333",
+                }
+            },
+            itemStyle: {
+                // 图形上的地图区域
+                normal: {
+                    borderColor: "rgba(0,0,0,0.2)",
+                }
+            },
+            emphasis: {
+                itemStyle:{
+                    areaColor:'#cfa96b'
+                }
+            },
+            select:{
+                itemStyle:{
+                    areaColor:'#b78533'
+                }
+            }
+        }],
+        grid: {
+
+        },
+        series: [{
+            type: 'map',
+            mapType: 'china',
+            geoIndex: 0,
+            roam: false, // 鼠标是否可以缩放
+            label: {
+                show: true
+            },
+            // data: china
+        }]
+    };
+    myChart.setOption(option, true);
+    myChart.on('click',(e)=>{
+        window.location.href='./省份地图.html?'+e.name;
+    });
+</script>
+
+</html>

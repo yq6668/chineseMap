@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="./js/echarts.js"></script>
+    <script type="text/javascript" src="./js/jquery-3.1.1.js"></script>
+    <style>
+        #map {
+            width: 1000px;
+            height: 600px;
+            margin: auto;
+            color: rgb(67, 155, 125);
+        }
+    </style>
+</head>
+
+<body>
+    <h3>省份地图</h3>
+    <div id="map"></div>
+</body>
+<script>
+    var url = location.search;
+    var str = url.substring(1, url.length)
+    $.ajax({
+        type: 'get',
+        url: `chinamap/${str}.json`,
+        dataType: 'Json',
+        success: function (data) {
+            var geoJson = data;
+            var map = document.getElementById('map');
+            var myChart = echarts.init(map);
+            myChart.showLoading();
+            echarts.registerMap('str', geoJson);
+            myChart.hideLoading();
+            const option = {
+                geo: [{
+                    // 地理坐标系组件
+                    map: "str",
+                    roam: true, // 可以缩放和平移
+                    aspectScale: 0.8, // 比例
+                    layoutCenter: ['50%', '50%'], // position位置
+                    label: {
+                        // 图形上的文本标签
+                        normal: {
+                            show: true,
+                            textStyle: {
+                                color: "rgba(0, 0, 0, 0.9)",
+                                fontSize: '8'
+                            }
+                        },
+                        emphasis: { // 高亮时样式
+                            color: "#333",
+                        }
+                    },
+                    itemStyle: {
+                        // 图形上的地图区域
+                        normal: {
+                            borderColor: "rgba(0,0,0,0.2)",
+                        }
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            areaColor: '#cfa96b'
+                        }
+                    },
+                    select: {
+                        itemStyle: {
+                            areaColor: '#b78533'
+                        }
+                    },
+                    //剪切各省份地图上的南海诸岛
+                    // regions: [{
+                    //     name: "南海诸岛",
+                    //     value: 0,
+                    //     label: {
+                    //         normal: {
+                    //             show: false
+                    //         }
+                    //     },
+                    //     emphasis: {
+                    //         disabled: true
+                    //     },
+                    //     select: {
+                    //         label: {
+                    //             normal: {
+                    //                 show: false
+                    //             }
+                    //         },
+                    //     },
+                    //     itemStyle: {
+                    //         normal: {
+                    //             opacity: 0,
+                    //             label: {
+                    //                 normal: {
+                    //                     show: false,
+                    //                 },
+                    //             }
+                    //         }
+                    //     }
+                    // }],
+                }],
+                grid: {
+
+                },
+                series: [{
+                    type: 'map',
+                    mapType: 'china',
+                    geoIndex: 0,
+                    roam: false, // 鼠标是否可以缩放
+                    label: {
+                        show: true
+                    },
+                    // data: china
+                }]
+            };
+            myChart.setOption(option, true);
+        }
+    })
+</script>
+<script>
+
+</script>
+
+</html>
